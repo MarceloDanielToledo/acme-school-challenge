@@ -1,0 +1,34 @@
+﻿<MudCard>
+    <MudCardContent>
+        <MudGrid Spacing="2">
+            <MudItem xs="12" sm="12" md="5" lg="5" xl="4" xxl="4">
+                <MudDateRangePicker @ref="Picker"
+                                    Label="Fecha de inscripción"
+                                    @bind-DateRange="DateRange"
+                                    AutoClose="true"
+                                    Margin="Margin.Dense"
+                                    Variant="Variant.Outlined"
+                                    AdornmentIcon="@Icons.Material.Outlined.CalendarMonth"
+                                    AdornmentColor="Color.Info"
+                                    PickerVariant="PickerVariant.Dialog">
+                </MudDateRangePicker>
+            </MudItem>
+            <MudSpacer />
+            <MudItem xs="12" sm="12" md="4" lg="4" xl="4" xxl="4" Style="text-align:right;align-content:center">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="Search"
+                           Size="Size.Small"
+                           EndIcon="@Icons.Material.Filled.Search">
+                    Buscar
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>
+@code {
+    [Parameter] public EventCallback SearchParameterEvent { get; set; }
+    public DateRange DateRange = new DateRange(DateTime.Now, DateTime.Now.AddDays(20).Date);
+    private MudDateRangePicker Picker;
+    private async Task Search() => await SearchParameterEvent.InvokeAsync();
+}

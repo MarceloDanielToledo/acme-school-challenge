@@ -1,0 +1,9 @@
+﻿
+<MudProgressLinear Color="Color.Secondary" Size="Size.Large" Striped="true" Indeterminate="true" Class="my-7">
+    <MudText Typo="Typo.subtitle1" Color="Color.Dark">
+        <b>@Message</b>
+    </MudText>
+</MudProgressLinear>
+@code {
+    [Parameter] public string Message { get; set; }
+}

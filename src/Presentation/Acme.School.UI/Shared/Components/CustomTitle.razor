@@ -1,0 +1,14 @@
+﻿<div class="ml-1">
+    @if (Title != null && Title != "")
+    {
+        <MudText Typo="Typo.h5" Color="Color.Primary">@Title</MudText>
+    }
+    @if (Description != null && Description != "")
+    {
+        <MudText Typo="Typo.subtitle1" Color="Color.Surface">@Description</MudText>
+    }
+</div>
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
+}

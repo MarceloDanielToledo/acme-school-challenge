@@ -1,0 +1,100 @@
+﻿@using global::Shared.Payment.Models
+@using global::Shared.Payment.Validators
+<MudForm Model="@Card" @ref="@Form" Validation="@(CardValidator.ValidateValue)" ValidationDelay="0">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Datos de la tarjeta</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="12">
+                    @if (Loading)
+                    {
+                        <MudItem xs="12">
+                            <MudFocusTrap>
+                                <MudProgressLinear Color="Color.Secondary" Size="Size.Large" Striped="true" Indeterminate="true" Class="my-7">
+                                    <MudText Typo="Typo.subtitle1" Color="Color.Dark">
+                                        <b>Cargando...</b>
+                                    </MudText>
+                                </MudProgressLinear>
+                            </MudFocusTrap>
+                        </MudItem>
+                    }
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="Card.Number"
+                                  Mask="@(new PatternMask("0000 0000 0000 0000"))"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Outlined.Numbers"
+                                  AdornmentColor="Color.Info"
+                                  For="@(() => Card.Number)"
+                                  Immediate="true"
+                                  Label="Número de tarjeta" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField @bind-Value="Card.HolderName"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Outlined.Edit"
+                                  AdornmentColor="Color.Info"
+                                  For="@(() => Card.HolderName)"
+                                  Immediate="true"
+                                  Label="Nombre del titular" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField Mask="@(new DateMask("MM/YY", 'Y', 'M'))"
+                                  Label="Expiración"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Adornment="Adornment.End"
+                                  For="@(() => Card.Expiration)"
+                                  @bind-Value="Card.Expiration" />
+                </MudItem>
+                <MudItem xs="6">
+                    <MudTextField Mask="@(new PatternMask("000"))"
+                                  Label="CVV"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  For="@(() => Card.CVV)"
+                                  Adornment="Adornment.End"
+                                  @bind-Value="Card.CVV" />
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="FillCard">Completar datos</MudButton>
+            <MudButton Disabled="PaymentButtonDisabled" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Pagar</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudForm>
+@code {
+    private MudForm Form;
+    CardValidator CardValidator = new CardValidator();
+    Card Card = new Card();
+    private bool Loading { get; set; } = false;
+    private bool PaymentButtonDisabled { get; set; } = false;
+    [Parameter] public EventCallback<Card> CardSetEvent { get; set; }
+
+    private async Task Submit()
+    {
+        await Form.Validate();
+        if (Form.IsValid)
+        {
+            PaymentButtonDisabled = true;
+            await CardSetEvent.InvokeAsync(Card);
+        }
+    }
+
+    private void FillCard()
+    {
+        Card.Number = "4111111111111111";
+        Card.HolderName = "Juan Pérez";
+        Card.Expiration = "1225";
+        Card.CVV = "123";
+    }
+}

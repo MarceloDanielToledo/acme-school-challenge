@@ -1,0 +1,57 @@
+﻿<MudCard>
+    <MudCardContent>
+        <MudGrid Spacing="2">
+            <MudItem xs="12" sm="12" md="5" lg="5" xl="4" xxl="4">
+                <MudTextField @bind-Value="SearchString"
+                              Placeholder="Búsqueda por nombre"
+                              Clearable="true"
+                              Immediate="true"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              OnClearButtonClick="@ClearSearchStringEvent"
+                              OnKeyDown="@EnterSearchEvent"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium"></MudTextField>
+            </MudItem>
+            <MudSpacer />
+            <MudItem xs="12" sm="12" md="4" lg="4" xl="4" xxl="4" Style="text-align:right;align-content:center">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Secondary"
+                           Size="Size.Small"
+                           OnClick="NewRecord"
+                           EndIcon="@Icons.Material.Filled.NewLabel">
+                    Nuevo
+                </MudButton>
+
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="Search"
+                           Size="Size.Small"
+                           EndIcon="@Icons.Material.Filled.Search">
+                    Buscar
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>
+@code {
+    [Parameter] public EventCallback<string> SearchParameterEvent { get; set; }
+    [Parameter] public EventCallback NewCourseEvent { get; set; }
+    [Parameter] public EventCallback ClearSearchEvent { get; set; }
+    private string SearchString { get; set; } = string.Empty;
+    public async Task ClearSearchStringEvent()
+    {
+        SearchString = string.Empty;
+        await ClearSearchEvent.InvokeAsync();
+    }
+    private async Task Search() => await SearchParameterEvent.InvokeAsync(SearchString);
+    public async Task EnterSearchEvent(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await Search();
+        }
+    }
+    private async Task NewRecord() => await NewCourseEvent.InvokeAsync();
+}

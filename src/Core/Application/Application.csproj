@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoWarn>CS8618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Application.UnitTests" />
+    <InternalsVisibleTo Include="Application.IntegrationTests" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Application.UnitTests</_Parameter1>
+      <_Parameter1>Application.IntegrationTests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Shared.Payment\Shared.Payment.csproj" />
+    <ProjectReference Include="..\domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Specification" Version="8.0.0" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="12.4.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Application.Interfaces
+@using MediatR
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.JSInterop
+@using Acme.School
+@using Acme.School.UI.Layout
+@using MudBlazor
+@using Application.UseCases.Students.Commands;
+@using Acme.School.UI.Helpers;
+@using Acme.School.UI.Shared.Components;
+@using Application.UseCases.Courses.Responses
+@using Application.UseCases.Students.Responses
+
+@inject ISnackbar _snackBar;
+@inject IDialogService _dialogService;
+@inject IMediator _mediator;
+@inject IPaymentService _paymentService;
+@inject IDatabaseSeeder _databaseSeeder;

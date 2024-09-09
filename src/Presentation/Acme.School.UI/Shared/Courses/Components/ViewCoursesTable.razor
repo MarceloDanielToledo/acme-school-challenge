@@ -1,0 +1,31 @@
+﻿@using Application.UseCases.Courses.Responses
+<MudTable Items="@Courses" Dense="true" Hover="true" Bordered="true" Striped="true" Loading="@LoadingTable" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh Style="text-align:left">Id</MudTh>
+        <MudTh Style="text-align:left">Nombre</MudTh>
+        <MudTh Style="text-align:left">Precio</MudTh>
+        <MudTh Style="text-align:left">Fecha comienzo</MudTh>
+        <MudTh Style="text-align:left">Fecha fin</MudTh>
+        <MudTh Style="text-align:left">Fecha creación</MudTh>
+        <MudTh Style="text-align:left">Fecha modificación</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Nombre">@context.Name</MudTd>
+        <MudTd DataLabel="Precio">$ @context.Price</MudTd>
+        <MudTd DataLabel="Fecha comienzo">@FormatHelper.FormatDate(context.StartOn)</MudTd>
+        <MudTd DataLabel="Fecha fin">@FormatHelper.FormatDate(context.EndOn)</MudTd>
+        <MudTd DataLabel="Fecha creación">@FormatHelper.FormatDateWithTime(context.CreatedOn) </MudTd>
+        <MudTd DataLabel="Fecha modificación">@FormatHelper.FormatDateWithTime(context.ModifiedOn)</MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No se encontraron registros</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+</MudTable>
+@code {
+    [Parameter] public List<CourseResponse> Courses { get; set; }
+    [Parameter] public bool LoadingTable { get; set; } = false;
+}

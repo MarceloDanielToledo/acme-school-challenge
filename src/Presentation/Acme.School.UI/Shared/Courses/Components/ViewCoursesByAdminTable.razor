@@ -1,0 +1,75 @@
+﻿@using Acme.School.UI.Shared.Students.Components
+<MudTable Items="@Courses" Dense="true" Hover="true" Bordered="true" Striped="true" Loading="@LoadingTable" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh Style="text-align:left">Id</MudTh>
+        <MudTh Style="text-align:left">Nombre</MudTh>
+        <MudTh Style="text-align:left">Precio</MudTh>
+        <MudTh Style="text-align:left">Fecha comienzo</MudTh>
+        <MudTh Style="text-align:left">Fecha fin</MudTh>
+        <MudTh Style="text-align:left">Fecha creación</MudTh>
+        <MudTh Style="text-align:left">Fecha modificación</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>
+            @if (context.ShowItems)
+            {
+                <MudIconButton Size="Size.Small" OnClick="@(() => ShowButtonPress(context))" title="Ocultar estudiantes" Icon="@Icons.Material.Filled.KeyboardArrowUp" />
+            }
+            else
+            {
+                <MudIconButton Size="Size.Small" OnClick="@(() => ShowButtonPress(context))" title="Ver estudiantes" Icon="@Icons.Material.Filled.KeyboardArrowDown" />
+            }
+        </MudTd>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Nombre">@context.Name</MudTd>
+        <MudTd DataLabel="Precio">$ @context.Price</MudTd>
+        <MudTd DataLabel="Fecha comienzo">@FormatHelper.FormatDate(context.StartOn)</MudTd>
+        <MudTd DataLabel="Fecha fin">@FormatHelper.FormatDate(context.EndOn)</MudTd>
+        <MudTd DataLabel="Fecha creación">@FormatHelper.FormatDateWithTime(context.CreatedOn) </MudTd>
+        <MudTd DataLabel="Fecha modificación">@FormatHelper.FormatDateWithTime(context.ModifiedOn)</MudTd>
+    </RowTemplate>
+    <ChildRowContent>
+        @if (context.ShowItems)
+        {
+            <MudTr>
+                <td colspan="8">
+                    <MudCard Elevation="2" Square=true>
+                        <MudCardContent>
+                            <ViewStudentsTable Students="GetStudentsFromCourse(context)" ViewEnrollmentDate="true" CoursesEnrollments="context.CourseEnrollments.ToList()"/>
+                        </MudCardContent>
+                        <MudCardActions />
+                    </MudCard>
+                </td>
+            </MudTr>
+        }
+
+    </ChildRowContent>
+    <NoRecordsContent>
+        <MudText>No se encontraron registros</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+</MudTable>
+@code {
+    [Parameter] public List<CourseResponse> Courses { get; set; }
+    [Parameter] public bool LoadingTable { get; set; } = false;
+    private void ShowButtonPress(CourseResponse course)
+    {
+        course.ShowItems = !course.ShowItems;
+    }
+    private List<StudentResponse> GetStudentsFromCourse(CourseResponse course)
+    {
+        var students = new List<StudentResponse>();
+        if (course.CourseEnrollments is not null && course.CourseEnrollments.Any())
+        {
+            foreach (var item in course.CourseEnrollments)
+            {
+                students.Add(item.Student);
+            }
+        }
+
+        return students;
+    }
+}

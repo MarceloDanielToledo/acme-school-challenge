@@ -1,0 +1,114 @@
+﻿@using Application.UseCases.Students.Requests
+@using Application.UseCases.Students.Validators
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@Request" @ref="@Form" Validation="@(RequestValidator.ValidateValue)" ValidationDelay="0">
+            <MudGrid Justify="Justify.Center">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12">
+                                @if (Loading)
+                                {
+                                    <MudItem xs="12">
+                                        <MudFocusTrap>
+                                            <MudProgressLinear Color="Color.Secondary" Size="Size.Large" Striped="true" Indeterminate="true" Class="my-7">
+                                                <MudText Typo="Typo.subtitle1" Color="Color.Dark">
+                                                    <b>Cargando...</b>
+                                                </MudText>
+                                            </MudProgressLinear>
+                                        </MudFocusTrap>
+                                    </MudItem>
+                                }
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="Request.Name"
+                                              For="@(() => Request.Name)"
+                                              Immediate="true"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Outlined.Edit"
+                                              AdornmentColor="Color.Info"
+                                              Label="Nombre" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="Request.Email"
+                                              For="@(() => Request.Email)"
+                                              Immediate="true"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Outlined.Email"
+                                              AdornmentColor="Color.Info"
+                                              Label="Email" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudDatePicker @bind-Date="DateOrBirth"
+                                               PickerVariant="PickerVariant.Dialog"
+                                               Label="Fecha de nacimiento"
+                                               OpenTo="OpenTo.Year"
+                                               Margin="Margin.Dense"
+                                               Variant="Variant.Outlined"
+                                               Adornment="Adornment.End"
+                                               AdornmentIcon="@Icons.Material.Outlined.CalendarMonth"
+                                               AdornmentColor="Color.Info"
+                                               MinDate="MinDate"
+                                               MaxDate="MaxDate"
+                                               DateFormat="dd/MM/yyyy" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Guardar</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private MudForm Form;
+    CreateStudentValidator RequestValidator = new CreateStudentValidator();
+    CreateStudentRequest Request = new CreateStudentRequest();
+    private DateTime? DateOrBirth { get; set; }
+    public DateTime? MinDate { get; set; }
+    public DateTime? MaxDate { get; set; }
+    private bool Loading { get; set; } = false;
+    protected override void OnInitialized()
+    {
+        DateOrBirth = DateTime.Today.AddYears(-18);
+        MinDate = DateTime.Today.AddYears(-100);
+        MaxDate = DateOrBirth;
+    }
+    private async Task Submit()
+    {
+        await Form.Validate();
+        if (Form.IsValid)
+        {
+            Loading = true;
+            var recordAdded = await AddStudent();
+            Loading = false;
+            if (recordAdded)
+            {
+                MudDialog.Close();
+            }
+
+        }
+    }
+    private async Task<bool> AddStudent()
+    {
+        Request.DateOfBirth = DateOrBirth.Value;
+        var response = await _mediator.Send(new CreateStudentCommand(Request));
+        if (!response.IsSuccess)
+        {
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            _snackBar.Add(response.Message, Severity.Success);
+        }
+        return response.IsSuccess;
+    }
+}

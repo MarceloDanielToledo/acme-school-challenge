@@ -1,0 +1,72 @@
+﻿@using Acme.School.UI.Shared.Students.Components
+@using Acme.School.UI.Shared.Students.Dialogs
+@using Application.UseCases.Students.Queries
+@using Application.UseCases.Students.Responses
+@page "/students/manage"
+<MudGrid Spacing="1" Justify="Justify.Center">
+    <MudItem xs="12">
+        <CustomTitle Title="Estudiantes" Description="Gestionar todos los estudiantes" />
+    </MudItem>
+    <MudItem xs="12">
+
+    </MudItem>
+    <MudItem xs="12">
+        <ViewStudentsFilter SearchParameterEvent="Search" ClearSearchEvent="GetAllStudents" NewStudentEvent="New" />
+    </MudItem>
+    <MudItem xs="12">
+        <ViewStudentsTable @ref="TableComponent" LoadingTable="Loading" Students="Students" />
+    </MudItem>
+</MudGrid>
+@code {
+    private List<StudentResponse> Students { get; set; } = [];
+    private List<StudentResponse> StudentsFiltered { get; set; } = [];
+    private ViewStudentsTable TableComponent;
+    private bool Loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllStudents();
+    }
+
+    private async Task GetAllStudents()
+    {
+        Loading = true;
+        Students.Clear();
+        var response = await _mediator.Send(new GetAllStudentsQuery());
+        if (!response.IsSuccess)
+        {
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            Students.AddRange(response.Data);
+        }
+        Loading = false;
+    }
+
+    private void Search(string searchValue)
+    {
+        StudentsFiltered.Clear();
+        StudentsFiltered = Students.Where(x =>x.Name.ToUpper().Contains(searchValue.ToUpper())).ToList();
+        Students.Clear();
+        Students.AddRange(StudentsFiltered);
+
+    }
+    public async Task New()
+    {
+        DialogOptions dialogOptFact = new()
+            {
+                CloseButton = true,
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Small,
+                Position = DialogPosition.Center,
+                BackdropClick = false
+            };
+        var dialog = _dialogService.Show<AddStudentDialog>($"Alta de estudiante", dialogOptFact);
+        var result = await dialog.Result;
+        if (result is not null && !result.Canceled)
+        {
+            await GetAllStudents();
+        }
+    }
+}

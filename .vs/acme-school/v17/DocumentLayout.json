@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\danie\\source\\repos\\acme-school\\acme-school\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1AC940F8-A715-4B03-89CC-159B37E15575}|src\\Shared\\Shared.Payment\\Shared.Payment.csproj|c:\\users\\danie\\source\\repos\\acme-school\\acme-school\\src\\shared\\shared.payment\\shared.payment.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{1AC940F8-A715-4B03-89CC-159B37E15575}|src\\Shared\\Shared.Payment\\Shared.Payment.csproj|solutionrelative:src\\shared\\shared.payment\\shared.payment.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 281,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Shared.Payment.csproj",
+              "DocumentMoniker": "C:\\Users\\danie\\source\\repos\\acme-school\\acme-school\\src\\Shared\\Shared.Payment\\Shared.Payment.csproj",
+              "RelativeDocumentMoniker": "src\\Shared\\Shared.Payment\\Shared.Payment.csproj",
+              "ToolTip": "C:\\Users\\danie\\source\\repos\\acme-school\\acme-school\\src\\Shared\\Shared.Payment\\Shared.Payment.csproj",
+              "RelativeToolTip": "src\\Shared\\Shared.Payment\\Shared.Payment.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-09-09T10:54:47.089Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

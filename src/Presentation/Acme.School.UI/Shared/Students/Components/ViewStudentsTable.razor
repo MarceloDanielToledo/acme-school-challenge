@@ -1,0 +1,53 @@
+﻿
+@using Application.UseCases.CoursesEnrollments.Responses
+@using Application.UseCases.Students.Requests
+@using Application.UseCases.Students.Responses
+<MudTable Items="@Students" Dense="true" Hover="true" Bordered="true" Striped="true" Loading="@LoadingTable" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh Style="text-align:left">Id</MudTh>
+        <MudTh Style="text-align:left">Nombre</MudTh>
+        <MudTh Style="text-align:left">Email</MudTh>
+        <MudTh Style="text-align:left">Fecha Nacimiento</MudTh>
+        <MudTh Style="text-align:left">Fecha creación</MudTh>
+        <MudTh Style="text-align:left">Fecha modificación</MudTh>
+        @if (ViewEnrollmentDate)
+        {
+            <MudTh Style="text-align:left">Fecha inscripción</MudTh>
+        }
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Nombre">@context.Name</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Fecha Nacimiento">@FormatHelper.FormatDate(context.DateOrBirth.Date)</MudTd>
+        <MudTd DataLabel="Fecha creación">@FormatHelper.FormatDateWithTime(context.CreatedOn) </MudTd>
+        <MudTd DataLabel="Fecha modificación">@FormatHelper.FormatDateWithTime(context.ModifiedOn)</MudTd>
+        @if (ViewEnrollmentDate)
+        {
+            <MudTd DataLabel="Fecha Inscripción">@FormatHelper.FormatDate(GetEnrollmentDate(context))</MudTd>
+        }
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No se encontraron registros</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+</MudTable>
+@code {
+    [Parameter] public List<StudentResponse> Students { get; set; }
+    [Parameter] public List<CourseEnrollmentResponse> CoursesEnrollments { get; set; } = [];
+    [Parameter] public bool LoadingTable { get; set; } = false;
+    [Parameter] public bool ViewEnrollmentDate { get; set; } = false;
+    [Parameter] public DateTime EnrollmentDate { get; set; } = DateTime.Now;
+
+
+    private DateTime? GetEnrollmentDate(StudentResponse student)
+    {
+        if (CoursesEnrollments is not null && CoursesEnrollments.Count > 0)
+        {
+            return CoursesEnrollments.FirstOrDefault(x => x.StudentId == student.Id).CreatedOn;
+        }
+        return null;
+    }
+}

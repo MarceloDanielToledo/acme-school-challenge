@@ -1,0 +1,64 @@
+﻿@using Application.UseCases.Courses.Responses
+@using Application.UseCases.CoursesEnrollments.Responses
+<MudTable Items="@Courses" Dense="true" Hover="true" Bordered="true" Striped="true" Loading="@LoadingTable" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh Style="text-align:left">Id</MudTh>
+        <MudTh Style="text-align:left">Nombre</MudTh>
+        <MudTh Style="text-align:left">Precio</MudTh>
+        <MudTh Style="text-align:left">Fecha comienzo</MudTh>
+        <MudTh Style="text-align:left">Fecha fin</MudTh>
+        <MudTh Style="text-align:left">Inscripto</MudTh>
+        <MudTh Style="text-align:left"></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Nombre">@context.Name</MudTd>
+        <MudTd DataLabel="Precio">$ @context.Price</MudTd>
+        <MudTd DataLabel="Fecha comienzo">@FormatHelper.FormatDate(context.StartOn)</MudTd>
+        <MudTd DataLabel="Fecha fin">@FormatHelper.FormatDate(context.EndOn)</MudTd>
+        <MudTd DataLabel="Inscripto" Style="text-align: center">
+            @if (IsEnrolled(context))
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircleOutline" title="Inscripto al curso" Color="Color.Success"></MudIconButton>
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.RemoveCircleOutline" title="No inscripto al curso" Color="Color.Error"></MudIconButton>
+            }
+        </MudTd>
+        <MudTd Style="text-align: center">
+            <MudButton IconSize="Size.Small"
+                       IconColor="Color.Tertiary"
+                       Disabled="IsEnrolled(context)"
+                       OnClick="@(()=>Enrollment(context))"
+                       EndIcon="@Icons.Material.Filled.Edit">
+                Inscribirse
+            </MudButton>
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No se encontraron registros</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+</MudTable>
+@code {
+    [Parameter] public EventCallback<CourseResponse> EnrollmentEvent { get; set; }
+    [Parameter] public List<CourseResponse> Courses { get; set; } = [];
+    [Parameter] public List<CourseEnrollmentResponse> CoursesEnrollments { get; set; } = [];
+    [Parameter] public int StudentId { get; set; }
+    [Parameter] public bool LoadingTable { get; set; } = false;
+
+
+    private bool IsEnrolled(CourseResponse course)
+    {
+        if (CoursesEnrollments is not null && CoursesEnrollments.Count > 0)
+        {
+            return CoursesEnrollments.Any(x => x.CourseId == course.Id && x.StudentId == StudentId);
+        }
+        return false;
+    }
+
+    private async Task Enrollment(CourseResponse course) => await EnrollmentEvent.InvokeAsync(course);
+}

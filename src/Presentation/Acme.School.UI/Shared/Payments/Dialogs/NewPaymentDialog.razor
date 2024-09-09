@@ -1,0 +1,102 @@
+﻿@using Acme.School.UI.Shared.Payments.Components
+@using global::Shared.Payment.Enums
+@using global::Shared.Payment.Responses
+<MudDialog>
+    <DialogContent>
+        <MudGrid Justify="Justify.Center">
+            @if (!PaymentIsConfirmed)
+            {
+                <MudItem xs="12" sm="12" md="12" lg="6" xl="8" xxl="8">
+                    <MudTextField Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Edit"
+                                  AdornmentColor="Color.Info"
+                                  Value="@Course.Name"
+                                  Label="Curso seleccionado"
+                                  ReadOnly="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="6" lg="4" xl="2" xxl="2">
+                    <MudTextField Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.PriceChange"
+                                  AdornmentColor="Color.Info"
+                                  Value="@Course.Price"
+                                  Label="Precio"
+                                  ReadOnly="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="6" lg="2" xl="2" xxl="2" Style="align-self:center;text-align: center;">
+                    <MudButton Disabled="@PaymentIsConfirmed" OnClick="PaymentEvent" Variant="Variant.Filled" Color="Color.Primary">
+                        <MudText>Pagar</MudText>
+                    </MudButton>
+                </MudItem>
+            }
+            else if (PaymentIsConfirmed && Loading)
+            {
+                <MudItem xs="12">
+                    <MudProgressLinear Color="Color.Secondary" Size="Size.Large" Striped="true" Indeterminate="true" Class="my-7">
+                        <MudText Typo="Typo.subtitle1" Color="Color.Dark">
+                            <b>Generando solicitud de pago...</b>
+                        </MudText>
+                    </MudProgressLinear>
+                </MudItem>
+            }
+            else
+            {
+
+                <MudItem xs="12">
+                    <PaymentManager Payment="@Payment" PaymentResultEvent="PaymentResult" />
+                </MudItem>
+
+
+            }
+
+        </MudGrid>
+    </DialogContent>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public CourseResponse Course { get; set; } = new();
+    private bool Loading { get; set; } = true;
+    private bool PaymentIsConfirmed { get; set; } = false;
+    private bool PaymentCreatedSuccessfully { get; set; } = false;
+    private Payment Payment { get; set; } = new();
+    private string ErrorMessage { get; set; } = string.Empty;
+    private async Task PaymentEvent()
+    {
+        PaymentIsConfirmed = true;
+        StateHasChanged();
+        await NewPaymentRequest();
+        Loading = false;
+        StateHasChanged();
+    }
+
+    private async Task NewPaymentRequest()
+    {
+        var response = await _paymentService.CreatePaymentRequest(Course.Price);
+        if (response.IsSuccess)
+        {
+            Payment = response.Data;
+            PaymentCreatedSuccessfully = true;
+        }
+        else
+        {
+            ErrorMessage = response.Message;
+        }
+    }
+    private void PaymentResult(Payment payment)
+    {
+        if (payment.Status == EnumPayment.Completed)
+        {
+            _snackBar.Add("Pago procesado correctamente", Severity.Success);
+            MudDialog.Close(DialogResult.Ok<Payment>(payment));
+        }
+        else
+        {
+            _snackBar.Add($"Hubo un error al procesar el pago. Estado: {payment.Status.ToString()}", Severity.Error);
+            MudDialog.Cancel();
+        }
+
+    }
+}

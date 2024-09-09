@@ -1,0 +1,43 @@
+﻿@page "/coursesenrollments/view"
+@using Acme.School.UI.Shared.Courses.Components
+@using Application.UseCases.Courses.Queries
+<MudGrid Spacing="1" Justify="Justify.Center">
+    <MudItem xs="12">
+        <CustomTitle Title="Cursos" Description="Visualizar los cursos y estudiantes según las inscripciones recibidas" />
+    </MudItem>
+    <MudItem xs="12">
+
+    </MudItem>
+    <MudItem xs="12">
+        <ViewCoursesAdminFilter @ref="ViewCoursesAdminFilter" SearchParameterEvent="Search" />
+    </MudItem>
+    <MudItem xs="12">
+        <ViewCoursesByAdminTable Courses="Courses" />
+    </MudItem>
+</MudGrid>
+@code {
+    private List<CourseResponse> Courses { get; set; } = [];
+    private ViewCoursesAdminFilter ViewCoursesAdminFilter;
+    private DateTime StartDate { get; set; } = DateTime.Now.AddDays(-1);
+    private DateTime EndDate { get; set; } = DateTime.Now.AddDays(20);
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllCourses();
+    }
+    private async Task Search()
+    {
+        StartDate = ViewCoursesAdminFilter.DateRange.Start.Value.Date;
+        EndDate = ViewCoursesAdminFilter.DateRange.End.Value.Date;
+        await GetAllCourses();
+
+    }
+    private async Task GetAllCourses()
+    {
+        Courses.Clear();
+        var response = await _mediator.Send(new GetAllCoursesWithStudentsByDateRangeQuery(StartDate, EndDate));
+        if (response.IsSuccess)
+        {
+            Courses.AddRange(response.Data.Where(x=>x.CourseEnrollments.Any()));
+        }
+    }
+}

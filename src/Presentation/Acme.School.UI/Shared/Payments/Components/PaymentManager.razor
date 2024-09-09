@@ -1,0 +1,68 @@
+﻿@using global::Shared.Payment.Models
+@using global::Shared.Payment.Responses
+@using global::Shared.Payment.Wrappers
+<MudCard>
+    <MudCardHeader>
+        <MudGrid Spacing="2">
+            <MudItem xs="6">
+                <MudTextField Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.PermIdentity"
+                              AdornmentColor="Color.Info"
+                              Value="@Payment.Id"
+                              Label="Identificador de pago"
+                              ReadOnly="true" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+                              AdornmentColor="Color.Info"
+                              Value="@Payment.Amount"
+                              Label="Monto del pago"
+                              ReadOnly="true" />
+            </MudItem>
+        </MudGrid>
+    </MudCardHeader>
+    <MudCardContent>
+        <CardForm CardSetEvent="CardSet" />
+        @if (Loading)
+        {
+            <HorizontalLoading Message="Confirmando Pago.."/>
+        }
+    </MudCardContent>
+</MudCard>
+@code {
+    [Parameter] public EventCallback<Payment> PaymentResultEvent { get; set; }
+    [Parameter] public Payment Payment { get; set; } = new();
+    private Card Card { get; set; } = new();
+    private Payment PaymentResult { get; set; } = new();
+    private bool Loading { get; set; } = false;
+    private async Task CardSet(Card card)
+    {
+        Loading = true;
+        Card = card;
+        StateHasChanged();
+        await ProcessPayment();
+    }
+
+    private async Task ProcessPayment()
+    {
+        await ConfirmPayment();
+        await GetPaymentStatus();
+        await PaymentResultEvent.InvokeAsync(PaymentResult);
+    }
+
+    private async Task ConfirmPayment()
+    {
+        var response = await _paymentService.ConfirmPaymentRequest(Payment.Id, Card);
+    }
+
+    private async Task GetPaymentStatus()
+    {
+        var response = await _paymentService.GetStatus(Payment.Id);
+        PaymentResult = response.Data;
+    }
+}

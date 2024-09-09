@@ -1,0 +1,72 @@
+﻿@page "/courses/manage"
+@using Acme.School.UI.Shared.Courses.Components
+@using Acme.School.UI.Shared.Courses.Dialogs
+@using Application.UseCases.Courses.Queries
+@using Application.UseCases.Courses.Responses
+<MudGrid Spacing="1" Justify="Justify.Center">
+    <MudItem xs="12">
+        <CustomTitle Title="Cursos" Description="Gestionar todos los cursos" />
+    </MudItem>
+    <MudItem xs="12">
+
+    </MudItem>
+    <MudItem xs="12">
+        <ViewCoursesFilter SearchParameterEvent="Search" ClearSearchEvent="GetAllCourses" NewCourseEvent="New" />
+    </MudItem>
+    <MudItem xs="12">
+        <ViewCoursesTable @ref="TableComponent" LoadingTable="Loading" Courses="Courses" />
+    </MudItem>
+</MudGrid>
+@code {
+    private List<CourseResponse> Courses { get; set; } = [];
+    private List<CourseResponse> CoursesFiltered { get; set; } = [];
+    private ViewCoursesTable TableComponent;
+    private bool Loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllCourses();
+    }
+
+    private async Task GetAllCourses()
+    {
+        Loading = true;
+        Courses.Clear();
+        var response = await _mediator.Send(new GetAllCoursesQuery());
+        if (!response.IsSuccess)
+        {
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            Courses.AddRange(response.Data);
+        }
+        Loading = false;
+    }
+
+    private void Search(string searchValue)
+    {
+        CoursesFiltered.Clear();
+        CoursesFiltered = Courses.Where(x => x.Name.ToUpper().Contains(searchValue.ToUpper())).ToList();
+        Courses.Clear();
+        Courses.AddRange(CoursesFiltered);
+
+    }
+    public async Task New()
+    {
+        DialogOptions dialogOptFact = new()
+            {
+                CloseButton = true,
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                Position = DialogPosition.Center,
+                BackdropClick = false
+            };
+        var dialog = _dialogService.Show<AddCourseDialog>($"Alta de curso", dialogOptFact);
+        var result = await dialog.Result;
+        if (result is not null && !result.Canceled)
+        {
+            await GetAllCourses();
+        }
+    }
+}

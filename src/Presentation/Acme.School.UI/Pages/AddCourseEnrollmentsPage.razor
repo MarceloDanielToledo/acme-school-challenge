@@ -1,0 +1,118 @@
+﻿@page "/coursesenrollments/add"
+@using Acme.School.UI.Shared.Courses.Components
+@using Acme.School.UI.Shared.Payments.Dialogs
+@using Acme.School.UI.Shared.Students.Components
+@using Acme.School.UI.Shared.Students.Dialogs
+@using Application.UseCases.Courses.Queries
+@using Application.UseCases.CoursesEnrollments.Commands
+@using Application.UseCases.CoursesEnrollments.Queries
+@using Application.UseCases.CoursesEnrollments.Requests
+@using Application.UseCases.CoursesEnrollments.Responses
+@using Application.UseCases.Students.Queries
+@using Application.UseCases.Students.Responses
+<MudGrid Spacing="1" Justify="Justify.Center">
+    <MudItem xs="12">
+        <CustomTitle Title="Cursos" Description="Visualizar los cursos" />
+    </MudItem>
+    @if (!StudentSelected)
+    {
+        <MudItem xs="12">
+            <SelectStudentFilter Students="@Students" SelectedStudentEvent="SelectedStudentEvent" />
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12">
+            <ViewCoursesByStudentTable StudentId="SelectedStudent.Id" Courses="@Courses" CoursesEnrollments="@CoursesEnrollments" EnrollmentEvent="Enrollment" />
+        </MudItem>
+    }
+
+
+</MudGrid>
+@code {
+    private List<CourseResponse> Courses { get; set; } = [];
+    private List<StudentResponse> Students { get; set; } = [];
+    private List<CourseEnrollmentResponse> CoursesEnrollments { get; set; } = [];
+    private StudentResponse SelectedStudent { get; set; } = new();
+    private bool StudentSelected = false;
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllStudents();
+        await GetAllCourses();
+    }
+    private async Task SelectedStudentEvent(StudentResponse student)
+    {
+        SelectedStudent = student;
+        await GetAllCoursesEnrollmentsOfStudent();
+        StudentSelected = true;
+    }
+    private async Task GetAllStudents()
+    {
+        Students.Clear();
+        var response = await _mediator.Send(new GetAllStudentsQuery());
+        if (!response.IsSuccess)
+        {
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            Students.AddRange(response.Data);
+        }
+    }
+    private async Task GetAllCourses()
+    {
+        Courses.Clear();
+        var response = await _mediator.Send(new GetAllCoursesQuery());
+        if (!response.IsSuccess)
+        {
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            Courses.AddRange(response.Data);
+        }
+    }
+    private async Task GetAllCoursesEnrollmentsOfStudent()
+    {
+        CoursesEnrollments.Clear();
+        var response = await _mediator.Send(new GetCoursesEnrollmentsByIdStudentQuery(SelectedStudent.Id));
+        if (response.IsSuccess)
+        {
+            CoursesEnrollments.AddRange(response.Data);
+        }
+    }
+    private async Task AddCourseEnrollment(CourseResponse course)
+    {
+        var response = await _mediator.Send(new CreateCourseEnrollmentCommand(new CreateCourseEnrollmentRequest(course.Id,SelectedStudent.Id)));
+        if (!response.IsSuccess)
+        {
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            _snackBar.Add(response.Message, Severity.Success);
+        }
+    }
+    public async Task Enrollment(CourseResponse course)
+    {
+        var parameter = new DialogParameters
+            {
+                { "Course", course },
+            };
+        DialogOptions dialogOptFact = new()
+            {
+                CloseButton = true,
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.Medium,
+                Position = DialogPosition.Center,
+                BackdropClick = false
+            };
+        var dialog = _dialogService.Show<NewPaymentDialog>($"Pago de inscripción para {course.Name}", parameter, dialogOptFact);
+        var result = await dialog.Result;
+        if (result is not null && !result.Canceled)
+        {
+            await AddCourseEnrollment(course);
+            await GetAllCoursesEnrollmentsOfStudent();
+        }
+    }
+}

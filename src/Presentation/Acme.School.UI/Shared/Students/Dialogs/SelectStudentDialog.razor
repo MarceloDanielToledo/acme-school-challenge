@@ -1,0 +1,85 @@
+﻿@using Application.UseCases.Students.Queries
+@using Application.UseCases.Students.Responses
+<MudDialog>
+    <DialogContent>
+        <MudGrid Justify="Justify.Center">
+            <MudGrid>
+                @if (Loading)
+                {
+                    <MudItem xs="12">
+                            <MudProgressLinear Color="Color.Secondary" Size="Size.Large" Striped="true" Indeterminate="true" Class="my-7">
+                                <MudText Typo="Typo.subtitle1" Color="Color.Dark">
+                                    <b>Cargando...</b>
+                                </MudText>
+                            </MudProgressLinear>
+                    </MudItem>
+                }
+                else
+                {
+                    <MudItem/>
+                    <MudItem xs="12">
+                        <MudSelect Value="@FirstSelectedStudent"
+                                   T="StudentResponse"
+                                   Variant="Variant.Outlined"
+                                   Adornment="Adornment.Start"
+                                   AdornmentIcon="@Icons.Material.Filled.VerifiedUser"
+                                   AdornmentColor="Color.Info"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   Margin="Margin.Dense"
+                                   ValueChanged="(value)=>SelectStudent(value)">
+                            <MudSelectItem Disabled="DisabledSelectItem" Value="@FirstSelectedStudent">@FirstSelectedStudent.Name</MudSelectItem>
+                            @if (Students is not null)
+                            {
+                                @foreach (var item in Students)
+                                {
+                                    <MudSelectItem Value=@item>@item.Name</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudGrid>
+    </DialogContent>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public EventCallback<StudentResponse> ReturnObject { get; set; }
+    private bool Loading { get; set; } = true;
+    private List<StudentResponse> Students { get; set; } = [];
+    public StudentResponse FirstSelectedStudent { get; set; } = new() { Id = 0, Name = "Seleccione un estudiante" };
+    private StudentResponse SelectedStudent { get; set; } = new();
+    private bool DisabledSelectItem { get; set; } = false;
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllStudents();
+        Loading = false;
+    }
+
+    private async Task GetAllStudents()
+    {
+        var response = await _mediator.Send(new GetAllStudentsQuery());
+        if (!response.IsSuccess)
+        {
+            DisabledSelectItem = true;
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            Students.AddRange(response.Data);
+        }
+    }
+    private async Task SelectStudent(StudentResponse value)
+    {
+        if (value.Id != 0)
+        {
+            SelectedStudent = value;
+            await Submit();
+        }
+    }
+    private async Task Submit()
+    {
+        await ReturnObject.InvokeAsync(SelectedStudent);
+        MudDialog.Close(DialogResult.Ok<StudentResponse>(SelectedStudent));
+    }
+}

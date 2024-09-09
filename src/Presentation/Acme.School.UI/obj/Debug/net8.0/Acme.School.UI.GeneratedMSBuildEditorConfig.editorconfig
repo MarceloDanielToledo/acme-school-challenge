@@ -1,0 +1,130 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.MudDebugAnalyzer = 
+build_property.MudAllowedAttributePattern = 
+build_property.MudIllegalParameters = 
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = Acme.School.UI
+build_property.RootNamespace = Acme.School.UI
+build_property.ProjectDir = C:\Users\danie\source\repos\acme-school\acme-school\src\Presentation\Acme.School.UI\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\danie\source\repos\acme-school\acme-school\src\Presentation\Acme.School.UI
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Pages/AddCourseEnrollmentsPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkQ291cnNlRW5yb2xsbWVudHNQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Pages/ManageCoursesPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlQ291cnNlc1BhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Pages/ManageStudentsPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlU3R1ZGVudHNQYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Pages/ViewCoursesEnrollmentsPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmlld0NvdXJzZXNFbnJvbGxtZW50c1BhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Components/CustomTitle.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ3VzdG9tVGl0bGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Components/HorizontalLoading.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcSG9yaXpvbnRhbExvYWRpbmcucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/CoursesEnrollments/Components/ViewCoursesEnrollmentsTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvdXJzZXNFbnJvbGxtZW50c1xDb21wb25lbnRzXFZpZXdDb3Vyc2VzRW5yb2xsbWVudHNUYWJsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Courses/Components/ViewCoursesAdminFilter.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvdXJzZXNcQ29tcG9uZW50c1xWaWV3Q291cnNlc0FkbWluRmlsdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Courses/Components/ViewCoursesByAdminTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvdXJzZXNcQ29tcG9uZW50c1xWaWV3Q291cnNlc0J5QWRtaW5UYWJsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Courses/Components/ViewCoursesByStudentTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvdXJzZXNcQ29tcG9uZW50c1xWaWV3Q291cnNlc0J5U3R1ZGVudFRhYmxlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Courses/Components/ViewCoursesFilter.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvdXJzZXNcQ29tcG9uZW50c1xWaWV3Q291cnNlc0ZpbHRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Courses/Components/ViewCoursesTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvdXJzZXNcQ29tcG9uZW50c1xWaWV3Q291cnNlc1RhYmxlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Courses/Dialogs/AddCourseDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvdXJzZXNcRGlhbG9nc1xBZGRDb3Vyc2VEaWFsb2cucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Payments/Components/CardForm.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFBheW1lbnRzXENvbXBvbmVudHNcQ2FyZEZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Payments/Components/PaymentManager.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFBheW1lbnRzXENvbXBvbmVudHNcUGF5bWVudE1hbmFnZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Payments/Dialogs/NewPaymentDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFBheW1lbnRzXERpYWxvZ3NcTmV3UGF5bWVudERpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Students/Components/SelectStudentFilter.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN0dWRlbnRzXENvbXBvbmVudHNcU2VsZWN0U3R1ZGVudEZpbHRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Students/Components/ViewStudentsFilter.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN0dWRlbnRzXENvbXBvbmVudHNcVmlld1N0dWRlbnRzRmlsdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Students/Components/ViewStudentsTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN0dWRlbnRzXENvbXBvbmVudHNcVmlld1N0dWRlbnRzVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Students/Dialogs/AddStudentDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN0dWRlbnRzXERpYWxvZ3NcQWRkU3R1ZGVudERpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Shared/Students/Dialogs/SelectStudentDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN0dWRlbnRzXERpYWxvZ3NcU2VsZWN0U3R1ZGVudERpYWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-ds3u1hri7w
+
+[C:/Users/danie/source/repos/acme-school/acme-school/src/Presentation/Acme.School.UI/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-0r1klz8frs

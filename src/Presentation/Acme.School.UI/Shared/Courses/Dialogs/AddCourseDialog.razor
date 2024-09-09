@@ -1,0 +1,109 @@
+﻿@using Application.UseCases.Courses.Commands
+@using Application.UseCases.Courses.Requests
+@using Application.UseCases.Courses.Validators
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@Request" @ref="@Form" Validation="@(RequestValidator.ValidateValue)" ValidationDelay="0">
+            <MudGrid Justify="Justify.Center">
+                <MudCard>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12">
+                                @if (Loading)
+                                {
+                                    <MudItem xs="12">
+                                        <MudFocusTrap>
+                                            <MudProgressLinear Color="Color.Secondary" Size="Size.Large" Striped="true" Indeterminate="true" Class="my-7">
+                                                <MudText Typo="Typo.subtitle1" Color="Color.Dark">
+                                                    <b>Cargando...</b>
+                                                </MudText>
+                                            </MudProgressLinear>
+                                        </MudFocusTrap>
+                                    </MudItem>
+                                }
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="Request.Name"
+                                              Variant="Variant.Outlined"
+                                              Adornment="Adornment.End"
+                                              Margin="Margin.Dense"
+                                              AdornmentIcon="@Icons.Material.Outlined.Edit"
+                                              AdornmentColor="Color.Info"
+                                              For="@(() => Request.Name)"
+                                              Immediate="true"
+                                              Label="Nombre" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudNumericField @bind-Value="Request.Price"
+                                                 For="@(() => Request.Price)"
+                                                 Variant="Variant.Outlined"
+                                                 Adornment="Adornment.End"
+                                                 Margin="Margin.Dense"
+                                                 AdornmentIcon="@Icons.Material.Outlined.PriceChange"
+                                                 AdornmentColor="Color.Success"
+                                                 Immediate="true"
+                                                 HideSpinButtons="true"
+                                                 Label="Precio" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudDateRangePicker @ref="Picker"
+                                                    Label="Fecha de inicio y fin"
+                                                    @bind-DateRange="DateRange"
+                                                    AutoClose="true"
+                                                    Margin="Margin.Dense"
+                                                    Variant="Variant.Outlined"
+                                                    AdornmentIcon="@Icons.Material.Outlined.CalendarMonth"
+                                                    AdornmentColor="Color.Info"
+                                                    PickerVariant="PickerVariant.Dialog">
+                                </MudDateRangePicker>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Guardar</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private MudForm Form;
+    CreateCourseValidator RequestValidator = new CreateCourseValidator();
+    CreateCourseRequest Request = new CreateCourseRequest();
+    private MudDateRangePicker Picker;
+    private DateRange DateRange = new DateRange(DateTime.Now.AddDays(1), DateTime.Now.AddDays(20).Date);
+    private bool Loading { get; set; } = false;
+    private async Task Submit()
+    {
+        await Form.Validate();
+        if (Form.IsValid)
+        {
+            Loading = true;
+            var recordAdded = await AddCourse();
+            Loading = false;
+            if (recordAdded)
+            {
+                MudDialog.Close();
+            }
+
+        }
+    }
+
+    private async Task<bool> AddCourse()
+    {
+        Request.StartOn = DateRange.Start.Value;
+        Request.EndOn = DateRange.End.Value;
+        var response = await _mediator.Send(new CreateCourseCommand(Request));
+        if (!response.IsSuccess)
+        {
+            _snackBar.Add(response.Message, Severity.Warning);
+        }
+        else
+        {
+            _snackBar.Add(response.Message, Severity.Success);
+        }
+        return response.IsSuccess;
+    }
+}

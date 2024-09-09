@@ -1,0 +1,38 @@
+﻿<MudCard>
+    <MudCardContent>
+        <MudGrid Spacing="2">
+            <MudItem xs="12">
+                <MudSelect Value="@FirstSelectedStudent"
+                           T="StudentResponse"
+                           Variant="Variant.Outlined"
+                           Adornment="Adornment.Start"
+                           AdornmentIcon="@Icons.Material.Filled.VerifiedUser"
+                           AdornmentColor="Color.Info"
+                           AnchorOrigin="Origin.BottomCenter"
+                           Margin="Margin.Dense"
+                           ValueChanged="(value)=>SelectStudent(value)">
+                    <MudSelectItem Disabled="true" Value="@FirstSelectedStudent">@FirstSelectedStudent.Name</MudSelectItem>
+                    @if (Students is not null)
+                    {
+                        @foreach (var item in Students)
+                        {
+                            <MudSelectItem Value=@item>@item.Name</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>
+@code {
+    [Parameter] public EventCallback<StudentResponse> SelectedStudentEvent { get; set; }
+    [Parameter] public List<StudentResponse> Students { get; set; } = [];
+    private StudentResponse FirstSelectedStudent { get; set; } = new() { Id = 0, Name = "Seleccione un estudiante" };
+    private async Task SelectStudent(StudentResponse value)
+    {
+        if (value.Id != 0)
+        {
+            await SelectedStudentEvent.InvokeAsync(value);
+        }
+    }
+}

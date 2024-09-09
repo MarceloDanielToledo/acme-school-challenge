@@ -1,0 +1,97 @@
+﻿@using Application.UseCases.CoursesEnrollments.Responses
+@* <MudTable Items="@Orders" Dense="true" Hover="true" Bordered="true" Striped="true" Loading="@_loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh Style="text-align:left">Id</MudTh>
+        <MudTh Style="text-align:left"><MudTableSortLabel SortBy="new Func<CreateEditOrderRequest, object>(x=>x.CreatedOn)">Fecha</MudTableSortLabel></MudTh>
+        <MudTh Style="text-align:left">Cliente</MudTh>
+        <MudTh Style="text-align:left"><MudTableSortLabel SortBy="new Func<CreateEditOrderRequest, object>(x=>x.PercentageRevenue)">% Fact.</MudTableSortLabel></MudTh>
+        <MudTh Style="text-align:left"><MudTableSortLabel SortBy="new Func<CreateEditOrderRequest, object>(x=>x.PercentageDiscount)">% Desc.</MudTableSortLabel></MudTh>
+        <MudTh Style="text-align:left"><MudTableSortLabel SortBy="new Func<CreateEditOrderRequest, object>(x=>x.Total)">Total</MudTableSortLabel></MudTh>
+        <MudTh Style="text-align:left">Estado</MudTh>
+        <MudTh Style="text-align:left"><MudTableSortLabel SortBy="new Func<CreateEditOrderRequest, object>(x=>x.User)">Usuario</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>
+            @if (context.ShowItems)
+            {
+                <MudIconButton Size="Size.Small" OnClick="@(() => ShowButtonPress(context))" Title="Ocultar productos" Icon="@Icons.Material.Filled.KeyboardArrowUp" />
+            }
+            else
+            {
+                <MudIconButton Size="Size.Small" OnClick="@(() => ShowButtonPress(context))" Title="Ver productos" Icon="@Icons.Material.Filled.KeyboardArrowDown" />
+            }
+        </MudTd>
+        <MudTd DataLabel="Id">@context.InternalId</MudTd>
+        <MudTd DataLabel="Fecha">@FormatHelper.FormatDateWithTime(context.CreatedOn)</MudTd>
+        <MudTd DataLabel="Cliente">@CustomerName(context)</MudTd>
+        <MudTd Class="amount-style" DataLabel="% Fact.">@context.PercentageRevenue %</MudTd>
+        <MudTd Class="amount-style" DataLabel="% Desc.">@context.PercentageDiscount %</MudTd>
+        <MudTd Class="amount-style" DataLabel="Total"><b style="color:var(--mud-palette-success-darken)">@FormatHelper.FormatArs(context.Total)</b></MudTd>
+        <MudTd DataLabel="Estado" Style="text-align: center">
+            @if (context.ValidForm)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircleOutline" Title="Válido para carga" Color="Color.Success"></MudIconButton>
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.RemoveCircleOutline" Title="Inválido para carga" Color="Color.Error"></MudIconButton>
+            }
+        </MudTd>
+        <MudTd DataLabel="Usuario">@context.User</MudTd>
+    </RowTemplate>
+    <ChildRowContent>
+        @if (context.OrderItems.Any() && context.ShowItems)
+        {
+            <MudTr>
+                <td colspan="12">
+                    <MudCard Elevation="2" Square=true Style="background:var(--mud-palette-background)">
+                        <MudCardContent>
+                            @if (!string.IsNullOrEmpty(context.Comments))
+                            {
+                                <MudAlert Severity="Severity.Info">@context.Comments</MudAlert>
+                            }
+                            <ViewCreateOrderItemsTable ReadOnly="true" CanManageItems="false" OrderItems="context.OrderItems" />
+                            @if (context.LocalErrors.Count > 0)
+                            {
+                                @foreach (var error in context.LocalErrors)
+                                {
+                                    <MudAlert Severity="Severity.Warning" Dense="true">@error</MudAlert>
+                                }
+
+                            }
+                        </MudCardContent>
+                        <MudCardActions />
+                    </MudCard>
+                </td>
+            </MudTr>
+        }
+
+    </ChildRowContent>
+    <NoRecordsContent>
+        <MudText>No se encontraron ordenes locales</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[] {10,100,150,200}" RowsPerPageString="Registros por página" InfoFormat="{first_item}-{last_item} de {all_items}" />
+    </PagerContent>
+</MudTable> *@
+@code {
+    [Parameter] public List<CourseResponse> Courses { get; set; } = [];
+    [Parameter] public List<CourseEnrollmentResponse> CoursesEnrollments { get; set; } = [];
+    [Parameter] public List<StudentResponse> Students { get; set; } = [];
+    [Parameter] public int StudentId { get; set; }
+    [Parameter] public bool LoadingTable { get; set; } = false;
+
+
+
+    // private bool IsEnrolled(CourseEnrollmentResponse courseEnrollment)
+    // {
+    //     if (true)
+    //     {
+            
+    //     }
+    // }
+}
